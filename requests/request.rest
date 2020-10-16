@@ -4,3 +4,8 @@ post http://localhost:3003/api/blogs
 Content-Type: application/json
 
 {"title":"first post", "author":"xavier","url":"http://localhost","likes":0}
+
+###
+
+get http://localhost:3003/api/blogs
+
