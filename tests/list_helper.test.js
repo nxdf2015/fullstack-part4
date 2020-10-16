@@ -1,6 +1,12 @@
 const { test, expect } = require('@jest/globals')
 
-const { dummy, totalLikes , favoriteBlog } = require('../utils/list_helper')
+const {
+  dummy,
+  totalLikes,
+  favoriteBlog,
+  mostLikes,
+  mostBlogs,
+} = require('../utils/list_helper')
 const posts = require('./data')
 
 test('dummy function return one', () => {
@@ -17,18 +23,17 @@ test(' return value of like when there is one post', () => {
       url: 'https://reactpatterns.com/',
       likes: 7,
       __v: 0,
-    }]
+    },
+  ]
 
   expect(totalLikes(posts)).toBe(7)
 })
 
 test('2 return sum of likes of the list of posts', () => {
-
   expect(totalLikes(posts)).toBe(36)
 })
 
-
-test('finds out which blog has most likes',() => {
+test('finds out which blog has most likes', () => {
   expect(favoriteBlog(posts)).toEqual({
     _id: '5a422b3a1b54a676234d17f9',
     title: 'Canonical string reduction',
@@ -39,5 +44,13 @@ test('finds out which blog has most likes',() => {
   })
 })
 
+test('find author with most blog', () => {
+  expect(mostLikes(posts)).toEqual({ author: 'Edsger W. Dijkstra', blogs: 17 })
+})
 
-
+test('find author with most blog', () => {
+  expect(mostBlogs(posts)).toEqual({
+    author: 'Robert C. Martin',
+    blogs: 3,
+  })
+})
