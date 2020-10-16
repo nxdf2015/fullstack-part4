@@ -7,9 +7,12 @@ const mongoose = require('mongoose')
 
 const middleware = require("./utils/middleware")
 const routerBlog = require("./controllers/blog")
-const password=process.env.password
-const mongoUrl = `mongodb+srv://admin:${password}@cluster0.llwdf.mongodb.net/bloglist?retryWrites=true&w=majority`
-const PORT = process.env.PORT
+const config = require("./utils/config")
+
+const{ password , user, PORT } =config 
+ 
+const mongoUrl = `mongodb+srv://${user}:${password}@cluster0.llwdf.mongodb.net/bloglist?retryWrites=true&w=majority`
+ 
 
 
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false, useCreateIndex: true })
