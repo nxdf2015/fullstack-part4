@@ -1,11 +1,11 @@
-const mongoose = require('mongoose');
+const mongoose = require('mongoose')
 
 const blogSchema = new mongoose.Schema({
   title: String,
   author: String,
   url: String,
   likes: Number,
-});
+})
 
 blogSchema.set('toJSON', {
   transform: (document, returnedObject) => {
@@ -15,8 +15,8 @@ blogSchema.set('toJSON', {
     delete returnedObject.__v;
     /* eslint-enable */
   },
-});
+})
 
-const Blog = mongoose.model('Blog', blogSchema);
+const Blog = mongoose.model('Blog', blogSchema)
 
-module.exports = Blog;
+module.exports = Blog
