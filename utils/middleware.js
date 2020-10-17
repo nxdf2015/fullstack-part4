@@ -12,10 +12,14 @@ const unknowEndpoint = (request, response) => {
 }
 
 const loggerMiddleware = (request, response, next) => {
-  logger.info(`method: ${request.method}`)
-  logger.info(`path: ${request.path}`)
-  if (/post/i.test(request.method)) { logger.info(`body: ${JSON.stringify(request.body)}`) }
-  logger.info('------------')
+  if (process.env.NODE_ENV !== 'test') {
+    logger.info(`method: ${request.method}`)
+    logger.info(`path: ${request.path}`)
+    if (/post/i.test(request.method)) {
+      logger.info(`body: ${JSON.stringify(request.body)}`)
+    }
+    logger.info('------------')
+  }
   next()
 }
 
