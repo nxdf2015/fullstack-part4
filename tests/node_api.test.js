@@ -2,7 +2,7 @@ const mongoose = require('mongoose')
 const request = require('supertest')
 
 const app = require('../app')
-const { deleteOne } = require('../models/blog')
+
 const Blog = require('../models/blog')
 const data = require('./data')
 
