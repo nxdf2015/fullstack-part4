@@ -12,12 +12,12 @@ Content-Type: application/json
 
 {"title":"second post", "author":"alfred","url":"http://localhost"}
 
-###
+### get all blogs
 
 get http://localhost:3003/api/blogs
 
 
-###
+### update a blog 
 
 put http://localhost:3003/api/blogs/5f8bea852d5e794ca43a4a75
 Content-Type: application/json
@@ -28,3 +28,19 @@ Content-Type: application/json
   "url": "http://localhost",
   "likes":0
 }
+
+
+###
+
+delete http://localhost:3003/api/blogs/5f8c38883f8d29539c6467f0
+
+
+
+### request with invalid id
+
+get http://localhost:3003/api/blogs/1
+
+
+###
+
+patch http://localhost:3003/api/blogs/5f8c38883f8d29539c6467f0/5

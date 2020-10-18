@@ -6,8 +6,9 @@ const errorHandler = (error, request, response, next) => {
     logger.error(`error: ${error.name}`)
     logger.error('-----------')
   }
+
   let status = 404
-  if (error.name === 'ValidationError'){
+  if (error.name === 'ValidationError' || error.name==='TypeError' || error.name === 'CastError'){
     status = 400
   }
   response.status(status).end(error.name)
