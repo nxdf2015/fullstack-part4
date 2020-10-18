@@ -3,9 +3,28 @@
 post http://localhost:3003/api/blogs
 Content-Type: application/json
 
-{"title":"second post", "author":"antoine","url":"http://localhost","likes":0}
+{"title":"second post", "author":"alfred","url":"http://localhost","likes":7}
+
+ 
+### create a blog without likes
+post http://localhost:3003/api/blogs
+Content-Type: application/json
+
+{"title":"second post", "author":"alfred","url":"http://localhost"}
 
 ###
 
 get http://localhost:3003/api/blogs
 
+
+###
+
+put http://localhost:3003/api/blogs/5f8bea852d5e794ca43a4a75
+Content-Type: application/json
+
+{
+  "title": "second post",
+  "author": "xavier",
+  "url": "http://localhost",
+  "likes":0
+}

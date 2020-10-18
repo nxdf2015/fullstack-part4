@@ -1,10 +1,20 @@
 const logger = require('./logger')
 
+
 const errorHandler = (error, request, response, next) => {
-  logger.error(`error: ${error.name}`)
-  logger.error('-----------')
-  response.status(404).end(error.name)
+  if (process.env.NODE_ENV !== 'test'){
+    logger.error(`error: ${error.name}`)
+    logger.error('-----------')
+  }
+  let status = 404
+  if (error.name === 'ValidationError'){
+    status = 400
+  }
+  response.status(status).end(error.name)
+
+
   next()
+
 }
 
 const unknowEndpoint = (request, response) => {
