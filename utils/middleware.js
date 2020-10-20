@@ -1,21 +1,27 @@
-const logger = require('./logger')
+const jwt = require('jsonwebtoken')
 
+const logger = require('./logger')
+const { getToken } = require('./token_helper')
+const SECRET = require('../utils/config').SECRET
 
 const errorHandler = (error, request, response, next) => {
-  if (process.env.NODE_ENV !== 'test'){
+  if (process.env.NODE_ENV !== 'test') {
     logger.error(`error: ${error.name}`)
     logger.error('-----------')
   }
 
   let status = 404
-  if (error.name === 'ValidationError' || error.name==='TypeError' || error.name === 'CastError'){
+  if (
+    error.name === 'ValidationError' ||
+    error.name === 'TypeError' ||
+    error.name === 'CastError' ||
+    error.name === 'NonAuthorized'
+  ) {
     status = 400
   }
-  response.status(status).end(error.name)
-
+  response.status(status).send(error.name)
 
   next()
-
 }
 
 const unknowEndpoint = (request, response) => {
@@ -34,4 +40,33 @@ const loggerMiddleware = (request, response, next) => {
   next()
 }
 
-module.exports = { errorHandler, unknowEndpoint, loggerMiddleware }
+const tokenExtractor =  (request, response, next) => {
+
+  const token = getToken(request.get('Authorization'))
+
+
+  try{
+
+    const decodeToken = jwt.verify(token , SECRET)
+    console.log(decodeToken)
+    if (decodeToken.id && decodeToken.username){
+      request.token = decodeToken
+      next()
+    }
+  }
+  catch(error){
+    response.redirect('/api/login')
+  }
+
+
+}
+
+
+
+
+module.exports = {
+  errorHandler,
+  unknowEndpoint,
+  loggerMiddleware,
+  tokenExtractor
+}

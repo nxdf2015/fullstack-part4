@@ -5,6 +5,8 @@ const mongoose = require('mongoose')
 
 const middleware = require('./utils/middleware')
 const routerBlog = require('./controllers/blog')
+const routerUser = require('./controllers/user')
+const routerLogin = require('./controllers/login')
 const config = require('./utils/config')
 
 
@@ -21,9 +23,12 @@ mongoose.connect(MONGODB_URI, {
 app.use(cors())
 app.use(express.json())
 app.use(middleware.loggerMiddleware)
+app.use(middleware.tokenExtractor)
+
+app.use('/api/users',routerUser)
+app.use('/api/login',routerLogin)
 
 app.use('/api/blogs', routerBlog)
-
 app.use(middleware.unknowEndpoint)
 app.use(middleware.errorHandler)
 
