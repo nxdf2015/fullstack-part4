@@ -44,17 +44,11 @@ const tokenExtractor =  (request, response, next) => {
 
   const token = getToken(request.get('Authorization'))
 
-
-
-
   const decodeToken = jwt.verify(token , SECRET)
   console.log(decodeToken)
   if (decodeToken.id && decodeToken.username){
     request.token = decodeToken
-
   }
-
-
   next()
 
 
