@@ -15,7 +15,7 @@ const errorHandler = (error, request, response, next) => {
     error.name === 'ValidationError' ||
     error.name === 'TypeError' ||
     error.name === 'CastError' ||
-    error.name === 'NonAuthorized'
+    error.name === 'AuthorizationError'
   ) {
     status = 400
   }
@@ -43,16 +43,31 @@ const loggerMiddleware = (request, response, next) => {
 const tokenExtractor =  (request, response, next) => {
 
   const token = getToken(request.get('Authorization'))
+  if(token){
+    const decodeToken = jwt.verify(token , SECRET)
 
-  const decodeToken = jwt.verify(token , SECRET)
-  console.log(decodeToken)
-  if (decodeToken.id && decodeToken.username){
-    request.token = decodeToken
+    if (decodeToken && decodeToken.id && decodeToken.username){
+      request.token = decodeToken
+    }
+
   }
   next()
 
 
 
+}
+
+const verifyToken = (request,response,next) => {
+  const token = request.token
+  if (token === null || token.id === null ){
+    const error = new Error()
+    error.name = 'AuthorizationError'
+    throw error
+
+  }
+  else {
+    next()
+  }
 }
 
 
@@ -62,5 +77,6 @@ module.exports = {
   errorHandler,
   unknowEndpoint,
   loggerMiddleware,
-  tokenExtractor
+  tokenExtractor,
+  verifyToken
 }

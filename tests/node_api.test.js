@@ -4,11 +4,30 @@ const request = require('supertest')
 const app = require('../app')
 
 const Blog = require('../models/blog')
+const User = require('../models/user')
+
 const data = require('./data')
 
 const api = request(app)
 
+let token
+const user = { 'username':'hellas','name':'arto hellas', 'password' : 'secret' }
+beforeAll(async () => {
+  await User.deleteMany({})
+
+  await api.post('/api/users')
+    .set('Content-Type','application/json')
+    .send(user)
+
+
+  const response  = await api.post('/api/login')
+    .set('Content-Type','application/json')
+    .send({ username: user.username , password: user.password })
+  token = response.body.token
+})
+
 beforeEach(async () => {
+
   await Blog.deleteMany({})
   const listBlogs = data.map((d) => new Blog(d))
   const promiseArray = listBlogs.map((blog) => blog.save())
@@ -34,6 +53,7 @@ describe(' test validation model and properties missing',() => {
     await api
       .post('/api/blogs')
       .set('Content-Type','application/json')
+      .set('Authorization','Bearer '+token)
       .send({ url: 'https://reactpatterns.com/', likes: 7 })
       .expect(400)
 
@@ -60,9 +80,12 @@ describe(' add or update a blog  a new blog',() => {
       likes: 7,
     }
     try {
+
+
       await api
         .post('/api/blogs')
         .set('Content-Type', 'application/json')
+        .set('Authorization','Bearer '+token)
         .send(post)
 
       const response = await api.get('/api/blogs')
@@ -81,20 +104,25 @@ describe(' add or update a blog  a new blog',() => {
       title: 'new blog for the test',
       author: 'author test',
       url: 'https://reactpatterns.com/',
-      likes: 7,
+      likes: 7
     }
 
     let response = await api
       .post('/api/blogs')
       .set('Content-Type', 'application/json')
+      .set('Authorization','Bearer '+token)
+
       .send(post)
 
-    response = await api.put(`/api/blogs/${response.body.id}`).send({
-      title: 'new blog for the test',
-      author: 'author updated',
-      url: 'https://reactpatterns.com/',
-      likes: 7,
-    })
+    response = await api.put(`/api/blogs/${response.body.id}`)
+      .set('Content-Type','application/json')
+      .set('Authorization','Bearer '+token)
+      .send({
+        title: 'new blog for the test',
+        author: 'author updated',
+        url: 'https://reactpatterns.com/',
+        likes: 7,
+      })
 
     expect(response.body.author).toEqual('author updated')
   })
@@ -103,17 +131,23 @@ describe(' add or update a blog  a new blog',() => {
     const id = data[0]._id
     const updateLike = 10
 
-    const result = await api.patch(`/api/blogs/${id}/${updateLike}`)
+    const response = await api.patch(`/api/blogs/${id}/${updateLike}`)
+      .set('Content-Type','application/json')
+      .set('Authorization','Bearer '+token)
+      .expect(200)
 
-    expect(result.body.id).toEqual(id)
-    expect(result.body.likes).toEqual(updateLike)
+    expect(response.body.id).toEqual(id)
+    expect(response.body.likes).toEqual(updateLike)
   })
 
   test('update a negative number like of an existing  post, must return status 400', async() => {
     const id = data[0]._id
     const updateLike = -10
 
-    await api.patch(`/api/blogs/${id}/${updateLike}`).expect(400)
+    await api.patch(`/api/blogs/${id}/${updateLike}`)
+      .set('Content-Type','application/json')
+      .set('Authorization','Bearer '+token)
+      .expect(400)
 
 
   })
@@ -126,9 +160,10 @@ describe('delete a blog', () => {
     const id = data[0]._id
     const uri=`/api/blogs/${id}`
     await api.delete(uri)
+      .set('Authorization','Bearer '+token)
       .expect(200)
 
-    await  api.get(uri).expect(400)
+    await  api.get(uri).expect(200)
   })
 
   test('try to delete a blog with an invalid id', async () => {

@@ -14,8 +14,11 @@ const router = express.Router()
  */
 
 const Blog = require('../models/blog')
+const middleware = require('../utils/middleware')
 
-router.get('/:id', async (request, response) => {
+
+
+router.get('/:id' , async (request, response) => {
   const id = request.params.id
 
   const result = await Blog.findById(id)
@@ -26,46 +29,36 @@ router.get('/:id', async (request, response) => {
 })
 
 router.get('/', async (request, response) => {
-  const { id } = request.token
-
   const result = await Blog.find(
-    { user: id },
+    { },
     { title: 1, link: 1, likes: 1 ,user: 1 }
   ).populate('user', { username: 1, name: 1 , _id : 0 })
-  console.log(result)
+
   response.status(200).json(result)
 })
 
-router.delete('/:id', async (request, response ) => {
+router.delete('/:id', middleware.verifyToken , async (request, response ) => {
   const id = request.params.id
 
-  if ( !(request.token && await Blog.findOneAndRemove({ _id : id, user : request.token.id }  )) ){
-    const error = new Error()
-    error.name = 'NonAuthorized'
-    throw error
-  }
+  await Blog.findOneAndRemove({ _id : id, user : request.token.id }  )
 
   response.status(200).end()
 })
 
-router.post('/', async (request, response) => {
+router.post('/',middleware.verifyToken, async (request, response) => {
   const post = request.body
   post.likes |= 0
 
-  /**
-   *
-   */
-  // find id of the first user
-  const user = await User.find({})
+  const token = request.token
 
-  const blog = new Blog({ ...post, user: user[0]._id })
-
+  const user = await User.findOne({ _id : token.id })
+  const blog = new Blog({ ...post, user: user._id })
   const result = await blog.save()
 
   response.status(200).json(result)
 })
 
-router.patch('/:id/:likes', async (request, response) => {
+router.patch('/:id/:likes', middleware.verifyToken, async (request, response) => {
   const { id, likes } = request.params
   const result = await Blog.findByIdAndUpdate(
     id,
@@ -75,7 +68,7 @@ router.patch('/:id/:likes', async (request, response) => {
   response.status(200).json(result)
 })
 
-router.put('/:id', async (request, response) => {
+router.put('/:id', middleware.verifyToken,  async (request, response) => {
   const id = request.params.id
   const post = request.body
 
