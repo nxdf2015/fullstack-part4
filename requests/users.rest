@@ -1,17 +1,20 @@
-post http://localhost:3003/api/users
+post http://localhost:3001/api/users
 Content-Type: application/json
 
 {"username":"hellas","name":"arto hellas", "password" : "secret"}
 
 ###
 
-get http://localhost:3003/api/users
+get http://localhost:3001/api/users
 
 ###
 
-post http://localhost:3003/api/users
+post http://localhost:3001/api/users
 Content-Type: application/json
 
 {"name":"arto hellas", "password" : "secret"}
 
 ###
+
+get http://localhost:3001/api/users/name?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImhlbGxhcyIsImlkIjoiNWY4ZWVhYTI1ZTUzN2YwZmE0OWNjZGQ1IiwiaWF0IjoxNjAzMzU4MTcwfQ.W1Xl0HVtkb3PxfGuYwwRNfJlhwxrM9qU_QdFI0hHBPk
+

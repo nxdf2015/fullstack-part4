@@ -3,7 +3,7 @@ const bcrypt = require('bcrypt')
 require('express-async-errors')
 
 const User = require('../models/user')
-
+const { decodeToken } = require('../utils/token_helper')
 const UserRouter = express.Router()
 const saltRounds = 10
 
@@ -33,6 +33,11 @@ UserRouter.post('/', async (request, response,next) => {
     error.name='ValidationError'
     next(error)
   }
+})
+
+UserRouter.get('/name' , async (request,response) => {
+  console.log(request.query.token)
+  response.status(200).json(decodeToken(request.query.token))
 })
 
 module.exports = UserRouter
