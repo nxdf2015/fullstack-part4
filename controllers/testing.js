@@ -2,13 +2,21 @@ const express =require('express')
 
 
 const User = require('../models/user')
-
+const Blog = require('../models/user')
 const router = express.Router()
 
 
-router.get('/reset', (request,response) => {
-  User.deleteMany({}).then(() => response.status(200).end())
-    .catch(() => response.status(400))
+router.get('/reset', async (request,response) => {
+  try{
+
+    await  User.deleteMany({})
+    await Blog.deleteMany({})
+    response.status(200).end()
+  }
+  catch(error){
+    response.status(400).json(error)
+  }
+
 })
 
 
