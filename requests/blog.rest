@@ -1,6 +1,6 @@
 
 ### create a blog
-post http://localhost:3003/api/blogs
+post http://localhost:3001/api/blogs
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImhlbGxhcyIsImlkIjoiNWY4ZWVhYTI1ZTUzN2YwZmE0OWNjZGQ1IiwiaWF0IjoxNjAzMjAxNzY5fQ.fwWVcl1lgIeiEnS4MzuaiXtsp9Zx5ET0GAJGJuvj7Zs
 
@@ -8,25 +8,26 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Imhlb
 
  
 ### create a blog without likes
-post http://localhost:3003/api/blogs
+post http://localhost:3001/api/blogs
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImhlbGxhcyIsImlkIjoiNWY4ZWVhYTI1ZTUzN2YwZmE0OWNjZGQ1IiwiaWF0IjoxNjAzMjAxNzY5fQ.fwWVcl1lgIeiEnS4MzuaiXtsp9Zx5ET0GAJGJuvj7Zs
 
 {"title":"second post", "author":"alfred","url":"http://localhost"}
 
 ### get all blogs
 
-get http://localhost:3003/api/blogs
+get http://localhost:3001/api/blogs
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImhlbGxhcyIsImlkIjoiNWY4ZWVhYTI1ZTUzN2YwZmE0OWNjZGQ1IiwiaWF0IjoxNjAzMjAxNzY5fQ.fwWVcl1lgIeiEnS4MzuaiXtsp9Zx5ET0GAJGJuvj7Zs
 
 ### get all blogs -- invalid token 
 
-get http://localhost:3003/api/blogs
+get http://localhost:3001/api/blogs
 Authorization: Bearer _FWb57WuMl7F0oFDX3nEGzUkYLhE-fOT59eBQfGXS80
 
 
 ### update a blog 
 
-put http://localhost:3003/api/blogs/5f8bea852d5e794ca43a4a75
+put http://localhost:3001/api/blogs/5f8bea852d5e794ca43a4a75
 Content-Type: application/json
 
 {
@@ -39,15 +40,15 @@ Content-Type: application/json
 
 ###
 
-delete http://localhost:3003/api/blogs/5f8efb70b2d0b612648438a8
+delete http://localhost:3001/api/blogs/5f8efb70b2d0b612648438a8
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImhlbGxhcyIsImlkIjoiNWY4ZWVhYTI1ZTUzN2YwZmE0OWNjZGQ1IiwiaWF0IjoxNjAzMjAxNzY5fQ.fwWVcl1lgIeiEnS4MzuaiXtsp9Zx5ET0GAJGJuvj7Zs
 
 
 ### request with invalid id
 
-get http://localhost:3003/api/blogs/1
+get http://localhost:3001/api/blogs/1
 
 
 ###
 
-patch http://localhost:3003/api/blogs/5f8c460181fa5a4db0c5b63b/5
+patch http://localhost:3001/api/blogs/5f8c460181fa5a4db0c5b63b/5

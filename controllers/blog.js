@@ -48,7 +48,6 @@ router.post('/', middleware.verifyToken, async (request, response) => {
   post.likes |= 0
 
   const token = request.token
-
   const user = await User.findOne({ _id: token.id })
   const blog = new Blog({ ...post, user: user._id })
   const result = await blog.save()
@@ -57,10 +56,11 @@ router.post('/', middleware.verifyToken, async (request, response) => {
 })
 
 router.patch(
-  '/:id/:likes',
-  middleware.verifyToken,
+  '/:id/like',
+
   async (request, response) => {
-    const { id, likes } = request.params
+    const { id  } = request.params
+    const likes = request.body.likes
     const result = await Blog.findByIdAndUpdate(
       id,
       { $set: { likes: likes } },
